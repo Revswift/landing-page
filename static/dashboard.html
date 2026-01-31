@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RevSwift</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <section class="dashboard">
+        <div class="hero-bg"></div>
+        <div class="grid-pattern"></div>
+        <div class="glow-orb glow-orb-center"></div>
+
+        <div class="dashboard-content">
+            <div class="success-badge">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>You're on the list!</span>
+            </div>
+
+            <div class="glass-card position-card">
+                <div class="position-header">
+                    <svg class="icon trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                    <div>
+                        <p class="position-label">Your position</p>
+                        <p class="position-value" id="position-value">#0</p>
+                    </div>
+                </div>
+                <p class="position-text">
+                    You're ahead of <span class="highlight" id="percentile">0%</span> of other founders
+                </p>
+            </div>
+
+            <div class="glass-card referral-card">
+                <div class="referral-header">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                    <h3>Unlock Your Free Reality Audit</h3>
+                </div>
+                <p class="referral-desc">
+                    Refer fellow Founders to jump the queue and get a complimentary Reality Audit worth £500.
+                </p>
+
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span>Referrals</span>
+                        <span class="progress-count"><span id="referral-count">0</span>/3</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="progress-text" id="progress-text">3 more to unlock Early Access</p>
+                </div>
+
+                <div class="referral-link-section">
+                    <div class="link-display" id="referral-link">Loading...</div>
+                    <button class="btn-primary" id="copy-btn">
+                        <svg class="icon" id="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <svg class="icon hidden" id="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="copy-text">Copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <div class="reward-icon">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <p class="reward-count">1 Referral</p>
+                    <p class="reward-name">Priority Access</p>
+                </div>
+                <div class="reward-item active">
+                    <div class="reward-icon primary">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                    </div>
+                    <p class="reward-count">3 Referrals</p>
+                    <p class="reward-name primary">Reality Audit</p>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon accent">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                    </div>
+                    <p class="reward-count">5 Referrals</p>
+                    <p class="reward-name">Founding Member</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon">R</div>
+                <span class="logo-text">RevSwift</span>
+            </div>
+            <nav class="footer-nav">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </nav>
+            <div class="footer-social">
+                <a href="#" class="social-link">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                </a>
+                <a href="#" class="social-link">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RevSwift. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
