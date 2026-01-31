@@ -1014,3 +1014,138 @@ body {
 .reward-name.primary {
     color: var(--primary);
 }
+
+
+/* Privacy Policy Styles */
+.privacy-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    background: hsl(230, 25%, 4%);
+    color: hsl(0, 0%, 90%);
+    min-height: 100vh;
+}
+
+.privacy-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid hsla(165, 100%, 50%, 0.2);
+}
+
+.back-link {
+    display: inline-block;
+    color: hsl(165, 100%, 50%);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: hsl(175, 80%, 45%);
+}
+
+.privacy-header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: hsl(0, 0%, 98%);
+}
+
+.last-updated {
+    color: hsl(0, 0%, 60%);
+    font-size: 0.9rem;
+}
+
+.privacy-content section {
+    margin-bottom: 3rem;
+}
+
+.privacy-content h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: hsl(165, 100%, 50%);
+    margin: 0 0 1rem 0;
+}
+
+.privacy-content p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: hsl(0, 0%, 85%);
+}
+
+.privacy-content ul {
+    margin: 1rem 0 1rem 1.5rem;
+    line-height: 1.8;
+}
+
+.privacy-content li {
+    margin-bottom: 0.5rem;
+    color: hsl(0, 0%, 85%);
+}
+
+.privacy-content strong {
+    color: hsl(0, 0%, 95%);
+    font-weight: 600;
+}
+
+.privacy-content a {
+    color: hsl(165, 100%, 50%);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.privacy-content a:hover {
+    color: hsl(175, 80%, 45%);
+    text-decoration: underline;
+}
+
+.privacy-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid hsla(165, 100%, 50%, 0.2);
+    text-align: center;
+}
+
+.privacy-footer p {
+    color: hsl(0, 0%, 60%);
+    margin-bottom: 1rem;
+}
+
+.privacy-footer nav {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.privacy-footer nav a {
+    color: hsl(165, 100%, 50%);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.privacy-footer nav a:hover {
+    color: hsl(175, 80%, 45%);
+}
+
+@media (max-width: 768px) {
+    .privacy-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .privacy-header h1 {
+        font-size: 2rem;
+    }
+
+    .privacy-content h2 {
+        font-size: 1.25rem;
+    }
+
+    .privacy-content ul {
+        margin-left: 1rem;
+    }
+}
