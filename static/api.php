@@ -76,8 +76,18 @@ function getNextPosition($conn) {
 }
 
 if ($action === 'join') {
+    $first_name = trim($input['first_name'] ?? '');
+    $last_name = trim($input['last_name'] ?? '');
     $email = strtolower(trim($input['email'] ?? ''));
+    $job_title = trim($input['job_title'] ?? '');
+    $phone_number = trim($input['phone_number'] ?? '');
+    $country = trim($input['country'] ?? '');
     $referred_by = trim($input['referred_by'] ?? '');
+    
+    if (empty($first_name) || empty($last_name) || empty($job_title) || empty($phone_number) || empty($country)) {
+        echo json_encode(['success' => false, 'message' => 'All fields are required']);
+        exit;
+    }
     
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode(['success' => false, 'message' => 'Invalid email address']);
@@ -103,8 +113,8 @@ if ($action === 'join') {
     
     $referred_by_value = !empty($referred_by) ? $referred_by : null;
     
-    $stmt = $conn->prepare("INSERT INTO waitlist (email, referral_code, referred_by, position) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssi", $email, $referral_code, $referred_by_value, $position);
+    $stmt = $conn->prepare("INSERT INTO waitlist (first_name, last_name, email, job_title, phone_number, country, referral_code, referred_by, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssi", $first_name, $last_name, $email, $job_title, $phone_number, $country, $referral_code, $referred_by_value, $position);
     
     if ($stmt->execute()) {
         if ($referred_by_value) {
@@ -118,7 +128,8 @@ if ($action === 'join') {
             'success' => true,
             'position' => $position,
             'referral_code' => $referral_code,
-            'referral_count' => 0
+            'referral_count' => 0,
+            'first_name' => $first_name
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Database error']);

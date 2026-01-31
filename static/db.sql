@@ -4,7 +4,12 @@ USE revswift;
 
 CREATE TABLE IF NOT EXISTS waitlist (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    job_title VARCHAR(150) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    country VARCHAR(50) NOT NULL,
     referral_code VARCHAR(10) NOT NULL UNIQUE,
     referred_by VARCHAR(10) DEFAULT NULL,
     position INT NOT NULL,

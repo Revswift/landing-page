@@ -1,6 +1,6 @@
 const form = document.getElementById('waitlist-form');
-const emailInput = document.getElementById('email-input');
 const btnText = document.getElementById('btn-text');
+const successMessage = document.getElementById('success-message');
 
 const urlParams = new URLSearchParams(window.location.search);
 const referredBy = (urlParams.get('ref') || '').replace(/[^A-Z0-9]/g, '').substring(0, 6);
@@ -26,8 +26,17 @@ getCSRFToken();
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const email = emailInput.value.trim();
-    if (!email) return;
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const email = document.getElementById('email-input').value.trim();
+    const jobTitle = document.getElementById('job-title').value.trim();
+    const phoneNumber = document.getElementById('phone-number').value.trim();
+    const country = document.getElementById('country').value;
+    
+    if (!firstName || !lastName || !email || !jobTitle || !phoneNumber || !country) {
+        alert('Please fill in all fields');
+        return;
+    }
     
     if (!csrfToken) {
         alert('Security token not loaded. Please refresh the page.');
@@ -40,12 +49,15 @@ form.addEventListener('submit', async (e) => {
     try {
         const response = await fetch('api.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 action: 'join',
+                first_name: firstName,
+                last_name: lastName,
                 email: email,
+                job_title: jobTitle,
+                phone_number: phoneNumber,
+                country: country,
                 referred_by: referredBy || null,
                 csrf_token: csrfToken
             })
@@ -54,12 +66,20 @@ form.addEventListener('submit', async (e) => {
         const data = await response.json();
         
         if (data.success) {
-            const params = new URLSearchParams({
-                position: data.position,
-                code: data.referral_code,
-                count: data.referral_count
-            });
-            window.location.href = `dashboard.html?${params.toString()}`;
+            form.style.display = 'none';
+            document.querySelector('.hero-footer').style.display = 'none';
+            successMessage.style.display = 'block';
+            document.getElementById('success-text').textContent = 
+                `You're #${data.position} on the waitlist. Check your email for your referral link.`;
+            
+            setTimeout(() => {
+                const params = new URLSearchParams({
+                    position: data.position,
+                    code: data.referral_code,
+                    count: data.referral_count
+                });
+                window.location.href = `dashboard.html?${params.toString()}`;
+            }, 3000);
         } else {
             alert(data.message || 'Something went wrong. Please try again.');
             btnText.textContent = 'Join the Waitlist';

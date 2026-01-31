@@ -29,13 +29,37 @@
                 Stop wasting budget on broken marketing systems. RevSwift unifies strategy, execution, and attribution into one intelligent engine.
             </p>
 
-            <form id="waitlist-form" class="email-form">
-                <input type="email" id="email-input" placeholder="Enter your work email" required>
+            <form id="waitlist-form" class="waitlist-form">
+                <div class="form-row">
+                    <input type="text" id="first-name" placeholder="First Name" required>
+                    <input type="text" id="last-name" placeholder="Last Name" required>
+                </div>
+                <input type="email" id="email-input" placeholder="Work Email" required>
+                <input type="text" id="job-title" placeholder="Job Title" required>
+                <input type="tel" id="phone-number" placeholder="Phone Number" required>
+                <select id="country" required>
+                    <option value="">Select Country</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                    <option value="IE">Ireland</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="Other">Other</option>
+                </select>
                 <button type="submit" class="btn-primary">
                     <span id="btn-text">Join the Waitlist</span>
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </form>
+
+            <div id="success-message" class="success-message" style="display: none;">
+                <svg class="icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <h3>Welcome to RevSwift!</h3>
+                <p id="success-text">You're on the waitlist. Check your email for your referral link.</p>
+            </div>
 
             <p class="hero-footer">Join 2,400+ UK founders already on the list</p>
         </div>
