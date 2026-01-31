@@ -5,20 +5,23 @@ import GlassCard from "./ui/GlassCard";
 interface ReferralDashboardProps {
   position: number;
   referralCode: string;
+  referralCount?: number;
 }
 
-const ReferralDashboard = ({ position, referralCode }: ReferralDashboardProps) => {
+const ReferralDashboard = ({ position, referralCode, referralCount = 0 }: ReferralDashboardProps) => {
   const [copied, setCopied] = useState(false);
-  const referralCount = 0; // This would come from the database
   const referralGoal = 3;
   
-  const referralLink = `https://revswift.io/waitlist?ref=${referralCode}`;
+  const referralLink = `${window.location.origin}?ref=${referralCode}`;
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  // Calculate percentage ahead of others (simulated based on position)
+  const percentileAhead = Math.max(0, Math.min(99, Math.round((1 - (position / 10000)) * 100)));
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
@@ -47,7 +50,7 @@ const ReferralDashboard = ({ position, referralCode }: ReferralDashboardProps) =
           </div>
           
           <p className="text-muted-foreground">
-            You're ahead of <span className="text-primary font-medium">74%</span> of other founders
+            You're ahead of <span className="text-primary font-medium">{percentileAhead}%</span> of other founders
           </p>
         </GlassCard>
 
@@ -71,11 +74,13 @@ const ReferralDashboard = ({ position, referralCode }: ReferralDashboardProps) =
             <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500"
-                style={{ width: `${(referralCount / referralGoal) * 100}%` }}
+                style={{ width: `${Math.min((referralCount / referralGoal) * 100, 100)}%` }}
               />
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              {referralGoal - referralCount} more to unlock Early Access
+              {referralCount >= referralGoal 
+                ? "🎉 You've unlocked Early Access!" 
+                : `${referralGoal - referralCount} more to unlock Early Access`}
             </p>
           </div>
 
