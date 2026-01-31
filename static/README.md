@@ -22,12 +22,12 @@ Edit `config.php` and update the database credentials:
 $host = 'localhost';
 $dbname = 'revswift';
 $username = 'your_username';
-$password = 'your_password';
+$password = 'your_strong_password';  // Use strong password in production
 ```
 
 ### 3. Deploy Files
 
-Copy all files to your web server directory:
+Copy all files to your web server directory (e.g., `public_html/`):
 - index.html
 - dashboard.html
 - styles.css
@@ -35,23 +35,40 @@ Copy all files to your web server directory:
 - dashboard.js
 - api.php
 - config.php
+- .htaccess
 
 ### 4. Server Requirements
 
 - PHP 7.4 or higher
 - MySQL 5.7 or higher
 - Web server (Apache/Nginx)
+- HTTPS enabled (required for production)
 
-### 5. Test Locally
+### 5. Production Configuration
 
-Using PHP built-in server:
+Update `api.php` CORS settings to your domain:
 
-```bash
-cd static
-php -S localhost:8000
+```php
+header('Access-Control-Allow-Origin: https://yourdomain.com');
 ```
 
-Visit http://localhost:8000
+## Security Features
+
+- CSRF token protection
+- Rate limiting (5 requests per minute per IP)
+- SQL injection prevention (prepared statements)
+- XSS protection (input sanitization)
+- HTTPS enforcement via .htaccess
+- Security headers (X-Frame-Options, X-XSS-Protection, etc.)
+
+## Production Checklist
+
+- [ ] Set strong database password in `config.php`
+- [ ] Update CORS origin in `api.php` to your domain
+- [ ] Verify HTTPS is working
+- [ ] Test rate limiting
+- [ ] Test CSRF protection
+- [ ] Backup database regularly
 
 ## Features
 
@@ -70,11 +87,12 @@ static/
 ├── index.html          # Main landing page
 ├── dashboard.html      # Referral dashboard
 ├── styles.css          # All styles
-├── app.js             # Form handling
+├── app.js             # Form handling with CSRF
 ├── dashboard.js       # Dashboard logic
-├── api.php            # Backend API
+├── api.php            # Backend API with rate limiting
 ├── config.php         # Database config
-└── db.sql             # Database schema
+├── db.sql             # Database schema
+└── .htaccess          # HTTPS redirect and security headers
 ```
 
 ## API Endpoint
@@ -85,7 +103,8 @@ POST to `api.php` with JSON:
 {
   "action": "join",
   "email": "user@example.com",
-  "referred_by": "ABC123"
+  "referred_by": "ABC123",
+  "csrf_token": "token_from_get_csrf"
 }
 ```
 
