@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -25,11 +25,15 @@ function getNextPosition($conn) {
 
 if ($action === 'join') {
     $email = strtolower(trim($input['email'] ?? ''));
-    $referred_by = $input['referred_by'] ?? null;
+    $referred_by = trim($input['referred_by'] ?? '');
     
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode(['success' => false, 'message' => 'Invalid email address']);
         exit;
+    }
+    
+    if (!empty($referred_by) && !preg_match('/^[A-Z0-9]{6}$/', $referred_by)) {
+        $referred_by = null;
     }
     
     $stmt = $conn->prepare("SELECT id FROM waitlist WHERE email = ?");
@@ -45,12 +49,17 @@ if ($action === 'join') {
     $position = getNextPosition($conn);
     $referral_code = generateReferralCode();
     
+    $referred_by_value = !empty($referred_by) ? $referred_by : null;
+    
     $stmt = $conn->prepare("INSERT INTO waitlist (email, referral_code, referred_by, position) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssi", $email, $referral_code, $referred_by, $position);
+    $stmt->bind_param("sssi", $email, $referral_code, $referred_by_value, $position);
     
     if ($stmt->execute()) {
-        if ($referred_by) {
-            $conn->query("UPDATE waitlist SET referral_count = referral_count + 1 WHERE referral_code = '$referred_by'");
+        if ($referred_by_value) {
+            $update_stmt = $conn->prepare("UPDATE waitlist SET referral_count = referral_count + 1 WHERE referral_code = ?");
+            $update_stmt->bind_param("s", $referred_by_value);
+            $update_stmt->execute();
+            $update_stmt->close();
         }
         
         echo json_encode([

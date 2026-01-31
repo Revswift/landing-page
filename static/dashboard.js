@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const position = parseInt(urlParams.get('position')) || 0;
-const referralCode = urlParams.get('code') || '';
+const referralCode = (urlParams.get('code') || '').replace(/[^A-Z0-9]/g, '');
 const referralCount = parseInt(urlParams.get('count')) || 0;
 
 const positionValue = document.getElementById('position-value');
@@ -13,6 +13,12 @@ const copyBtn = document.getElementById('copy-btn');
 const copyIcon = document.getElementById('copy-icon');
 const checkIcon = document.getElementById('check-icon');
 const copyText = document.getElementById('copy-text');
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
 positionValue.textContent = `#${position.toLocaleString()}`;
 

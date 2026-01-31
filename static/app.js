@@ -3,7 +3,7 @@ const emailInput = document.getElementById('email-input');
 const btnText = document.getElementById('btn-text');
 
 const urlParams = new URLSearchParams(window.location.search);
-const referredBy = urlParams.get('ref');
+const referredBy = (urlParams.get('ref') || '').replace(/[^A-Z0-9]/g, '').substring(0, 6);
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify({
                 action: 'join',
                 email: email,
-                referred_by: referredBy
+                referred_by: referredBy || null
             })
         });
         
