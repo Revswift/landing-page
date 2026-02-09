@@ -132,6 +132,40 @@
         <div class="actions-bar">
             <button id="exportBtn" class="btn-small btn-export">Export CSV</button>
             <button id="refreshBtn" class="btn-small btn-mark">Refresh</button>
+            <button id="settingsBtn" class="btn-small btn-mark">Settings</button>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; padding: 2rem; overflow-y: auto;">
+            <div style="max-width: 600px; margin: 0 auto; background: var(--secondary); border-radius: var(--radius); border: 1px solid var(--border); padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.5rem; font-weight: 700;">Settings</h2>
+                    <button id="closeSettings" class="btn-small btn-mark">Close</button>
+                </div>
+
+                <!-- Change Password Section -->
+                <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Change Password</h3>
+                    <form id="changePasswordForm" class="waitlist-form">
+                        <input type="password" id="currentPassword" placeholder="Current Password" required>
+                        <input type="password" id="newPassword" placeholder="New Password" required>
+                        <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+                        <button type="submit">Update Password</button>
+                        <div id="passwordMessage" style="margin-top: 1rem; text-align: center;"></div>
+                    </form>
+                </div>
+
+                <!-- Add Admin Section -->
+                <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Add New Admin</h3>
+                    <form id="addAdminForm" class="waitlist-form">
+                        <input type="text" id="newAdminUsername" placeholder="Username" required>
+                        <input type="password" id="newAdminPassword" placeholder="Password" required>
+                        <button type="submit">Add Admin</button>
+                        <div id="adminMessage" style="margin-top: 1rem; text-align: center;"></div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="table-container">

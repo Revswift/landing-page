@@ -62,8 +62,27 @@ if ($action === 'admin_login') {
     $username = $input['username'] ?? '';
     $password = $input['password'] ?? '';
     
-    // Default admin credentials (change in production)
-    if ($username === 'admin' && $password === 'revswift2024') {
+    // Check database first
+    $stmt = $conn->prepare("SELECT id, username, password FROM admin_users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $authenticated = false;
+    
+    if ($result->num_rows === 1) {
+        $admin = $result->fetch_assoc();
+        if ($admin['password'] === $password) {
+            $authenticated = true;
+            $_SESSION['admin_username'] = $username;
+        }
+    } else if ($username === 'admin' && $password === 'revswift2024') {
+        // Fallback to default credentials
+        $authenticated = true;
+        $_SESSION['admin_username'] = 'admin';
+    }
+    
+    if ($authenticated) {
         $token = bin2hex(random_bytes(32));
         $_SESSION['admin_token'] = $token;
         $_SESSION['admin_authenticated'] = true;
@@ -82,7 +101,7 @@ function verifyAdminToken($token) {
            hash_equals($_SESSION['admin_token'], $token);
 }
 
-if (in_array($action, ['admin_get_waitlist', 'admin_toggle_test'])) {
+if (in_array($action, ['admin_get_waitlist', 'admin_toggle_test', 'admin_change_password', 'admin_add_user'])) {
     $token = $input['token'] ?? '';
     if (!verifyAdminToken($token)) {
         echo json_encode(['success' => false, 'message' => 'Unauthorized']);
@@ -127,6 +146,81 @@ if (in_array($action, ['admin_get_waitlist', 'admin_toggle_test'])) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Update failed']);
+        }
+        exit;
+    }
+    
+    if ($action === 'admin_change_password') {
+        $current_password = $input['current_password'] ?? '';
+        $new_password = $input['new_password'] ?? '';
+        $username = $_SESSION['admin_username'] ?? 'admin';
+        
+        if (strlen($new_password) < 8) {
+            echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters']);
+            exit;
+        }
+        
+        // Check if user exists in database
+        $stmt = $conn->prepare("SELECT id, password FROM admin_users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            $admin = $result->fetch_assoc();
+            if ($admin['password'] !== $current_password) {
+                echo json_encode(['success' => false, 'message' => 'Current password is incorrect']);
+                exit;
+            }
+            
+            // Update password
+            $update_stmt = $conn->prepare("UPDATE admin_users SET password = ? WHERE username = ?");
+            $update_stmt->bind_param("ss", $new_password, $username);
+            $update_stmt->execute();
+        } else {
+            // Default admin - verify and insert
+            if ($current_password !== 'revswift2024') {
+                echo json_encode(['success' => false, 'message' => 'Current password is incorrect']);
+                exit;
+            }
+            
+            $insert_stmt = $conn->prepare("INSERT INTO admin_users (username, password) VALUES (?, ?)");
+            $insert_stmt->bind_param("ss", $username, $new_password);
+            $insert_stmt->execute();
+        }
+        
+        echo json_encode(['success' => true]);
+        exit;
+    }
+    
+    if ($action === 'admin_add_user') {
+        $username = trim($input['username'] ?? '');
+        $password = $input['password'] ?? '';
+        
+        if (empty($username) || strlen($password) < 8) {
+            echo json_encode(['success' => false, 'message' => 'Invalid username or password']);
+            exit;
+        }
+        
+        // Check if username exists
+        $check_stmt = $conn->prepare("SELECT id FROM admin_users WHERE username = ?");
+        $check_stmt->bind_param("s", $username);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            echo json_encode(['success' => false, 'message' => 'Username already exists']);
+            exit;
+        }
+        
+        // Insert new admin
+        $stmt = $conn->prepare("INSERT INTO admin_users (username, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $password);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to add admin']);
         }
         exit;
     }

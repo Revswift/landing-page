@@ -122,6 +122,97 @@ function exportCSV() {
     a.click();
 }
 
+// Change password
+document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const messageEl = document.getElementById('passwordMessage');
+    
+    if (newPassword !== confirmPassword) {
+        messageEl.style.color = 'var(--destructive)';
+        messageEl.textContent = 'Passwords do not match';
+        return;
+    }
+    
+    if (newPassword.length < 8) {
+        messageEl.style.color = 'var(--destructive)';
+        messageEl.textContent = 'Password must be at least 8 characters';
+        return;
+    }
+    
+    try {
+        const response = await fetch('api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'admin_change_password',
+                token,
+                current_password: currentPassword,
+                new_password: newPassword
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            messageEl.style.color = 'var(--primary)';
+            messageEl.textContent = 'Password updated successfully';
+            document.getElementById('changePasswordForm').reset();
+        } else {
+            messageEl.style.color = 'var(--destructive)';
+            messageEl.textContent = data.message || 'Failed to update password';
+        }
+    } catch (error) {
+        messageEl.style.color = 'var(--destructive)';
+        messageEl.textContent = 'Error updating password';
+    }
+});
+
+// Add admin
+document.getElementById('addAdminForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('newAdminUsername').value;
+    const password = document.getElementById('newAdminPassword').value;
+    const messageEl = document.getElementById('adminMessage');
+    
+    if (password.length < 8) {
+        messageEl.style.color = 'var(--destructive)';
+        messageEl.textContent = 'Password must be at least 8 characters';
+        return;
+    }
+    
+    try {
+        const response = await fetch('api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'admin_add_user',
+                token,
+                username,
+                password
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            messageEl.style.color = 'var(--primary)';
+            messageEl.textContent = 'Admin added successfully';
+            document.getElementById('addAdminForm').reset();
+        } else {
+            messageEl.style.color = 'var(--destructive)';
+            messageEl.textContent = data.message || 'Failed to add admin';
+        }
+    } catch (error) {
+        messageEl.style.color = 'var(--destructive)';
+        messageEl.textContent = 'Error adding admin';
+    }
+});
+
 // Event listeners
 document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('admin_token');
@@ -130,6 +221,14 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 document.getElementById('exportBtn').addEventListener('click', exportCSV);
 document.getElementById('refreshBtn').addEventListener('click', loadWaitlist);
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+    document.getElementById('settingsModal').style.display = 'block';
+});
+
+document.getElementById('closeSettings').addEventListener('click', () => {
+    document.getElementById('settingsModal').style.display = 'none';
+});
 
 // Initial load
 loadWaitlist();
