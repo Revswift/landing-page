@@ -69,6 +69,27 @@ header('Access-Control-Allow-Origin: https://yourdomain.com');
 - [ ] Test rate limiting
 - [ ] Test CSRF protection
 - [ ] Backup database regularly
+- [ ] Change default admin password (default: username: 'admin', password: 'password')
+
+## Admin Access
+
+### Default Credentials
+- Username: `admin`
+- Password: `password`
+
+**IMPORTANT:** Change these credentials immediately after first login!
+
+### Admin Features
+- View all waitlist entries
+- Export waitlist to CSV
+- Mark entries as test data
+- Filter and sort entries
+- View statistics (total entries, test entries)
+
+### Accessing Admin Panel
+1. Navigate to `/admin-login.html`
+2. Login with admin credentials
+3. You'll be redirected to the admin dashboard
 
 ## Features
 
@@ -77,6 +98,9 @@ header('Access-Control-Allow-Origin: https://yourdomain.com');
 - Position tracking
 - Referral counting
 - Dashboard view with progress
+- Admin login and dashboard
+- Export waitlist to CSV
+- Mark entries as test data
 - Responsive design
 - Glass morphism UI
 
@@ -86,9 +110,13 @@ header('Access-Control-Allow-Origin: https://yourdomain.com');
 static/
 ├── index.html          # Main landing page
 ├── dashboard.html      # Referral dashboard
+├── admin-login.html    # Admin login page
+├── admin-dashboard.html # Admin dashboard
 ├── styles.css          # All styles
 ├── app.js             # Form handling with CSRF
 ├── dashboard.js       # Dashboard logic
+├── admin-login.js     # Admin login logic
+├── admin-dashboard.js # Admin dashboard logic
 ├── api.php            # Backend API with rate limiting
 ├── config.php         # Database config
 ├── db.sql             # Database schema

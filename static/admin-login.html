@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - RevSwift</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="glass-card" style="max-width: 400px; position: relative; z-index: 1;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Admin Login</h1>
+                <p style="color: var(--muted-fg);">Access the waitlist dashboard</p>
+            </div>
+            <form id="loginForm" class="waitlist-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <div id="message" style="margin-top: 1rem; text-align: center; color: var(--destructive);"></div>
+            </form>
+        </div>
+    </div>
+    <script src="admin-login.js"></script>
+</body>
+</html>

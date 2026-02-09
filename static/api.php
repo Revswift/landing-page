@@ -58,6 +58,80 @@ if ($action === 'get_csrf') {
     exit;
 }
 
+if ($action === 'admin_login') {
+    $username = $input['username'] ?? '';
+    $password = $input['password'] ?? '';
+    
+    // Default admin credentials (change in production)
+    if ($username === 'admin' && $password === 'revswift2024') {
+        $token = bin2hex(random_bytes(32));
+        $_SESSION['admin_token'] = $token;
+        $_SESSION['admin_authenticated'] = true;
+        echo json_encode(['success' => true, 'token' => $token]);
+        exit;
+    }
+    
+    echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
+    exit;
+}
+
+function verifyAdminToken($token) {
+    return isset($_SESSION['admin_token']) && 
+           isset($_SESSION['admin_authenticated']) && 
+           $_SESSION['admin_authenticated'] === true &&
+           hash_equals($_SESSION['admin_token'], $token);
+}
+
+if (in_array($action, ['admin_get_waitlist', 'admin_toggle_test'])) {
+    $token = $input['token'] ?? '';
+    if (!verifyAdminToken($token)) {
+        echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+        exit;
+    }
+    
+    if ($action === 'admin_get_waitlist') {
+        $result = $conn->query("SELECT * FROM waitlist ORDER BY position ASC");
+        $waitlist = [];
+        while ($row = $result->fetch_assoc()) {
+            $waitlist[] = $row;
+        }
+        
+        $total = count($waitlist);
+        $test = count(array_filter($waitlist, fn($e) => isset($e['is_test']) && $e['is_test']));
+        $real = $total - $test;
+        
+        $today = date('Y-m-d');
+        $today_count = count(array_filter($waitlist, fn($e) => strpos($e['created_at'], $today) === 0));
+        
+        echo json_encode([
+            'success' => true, 
+            'waitlist' => $waitlist,
+            'stats' => [
+                'total' => $total,
+                'real' => $real,
+                'test' => $test,
+                'today' => $today_count
+            ]
+        ]);
+        exit;
+    }
+    
+    if ($action === 'admin_toggle_test') {
+        $id = intval($input['id'] ?? 0);
+        $is_test = $input['is_test'] ? 1 : 0;
+        
+        $stmt = $conn->prepare("UPDATE waitlist SET is_test = ? WHERE id = ?");
+        $stmt->bind_param("ii", $is_test, $id);
+        
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Update failed']);
+        }
+        exit;
+    }
+}
+
 $csrf_token = $input['csrf_token'] ?? '';
 if (!validateCSRF($csrf_token)) {
     http_response_code(403);
